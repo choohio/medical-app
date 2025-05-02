@@ -36,6 +36,19 @@ const registerSchema = z
 
 type RegisterSchema = z.infer<typeof registerSchema>;
 
+interface ErrorWithMessage {
+  message: string;
+}
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as ErrorWithMessage).message === "string"
+  );
+}
+
 export default function Register() {
   const router = useRouter();
 
@@ -45,11 +58,16 @@ export default function Register() {
       toast.success("Пользователь зарегистрирован")
       router.push('/login')
     },
-    onError: (error: any) => {
-      if (error.message === "Email уже зарегистрирован") {
-        setError("email", { type: "server", message: error.message });
+    onError: (error: unknown) => {
+      if (isErrorWithMessage(error)) {
+        const message = error.message;
+        if (message === "Email уже зарегистрирован") {
+          setError("email", { type: "server", message });
+        } else {
+          setError("root", { type: "server", message });
+        }
       } else {
-        setError("root", { type: "server", message: error.message });
+        setError("root", { type: "server", message: "Неизвестная ошибка" });
       }
     }
   });
