@@ -51,8 +51,9 @@ export default function Profile() {
   return (
     <div>
       <Header />
+      <h1 className="text-center text-4xl md:text-5xl font-bold pt-6">Личный кабинет</h1>
       <div className="flex justify-center h-screen pt-20">
-        {user ? <h1 className="text-center">Привет, {user?.name}</h1> : <div className="hidden"></div>}
+        {user ? <div className="text-center text-4xl md:text-5xl">Привет, {user?.name}</div> : <div className="hidden"></div>}
       </div>
     </div>
   );

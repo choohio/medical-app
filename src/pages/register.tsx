@@ -95,7 +95,7 @@ export default function Register() {
       <Header />
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-yellow-100 px-4">
         <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
-          <h2 className="mb-6 text-center text-2xl font-bold">Регистрация</h2>
+          <h1 className="mb-6 text-center text-4xl md:text-5xl font-bold">Регистрация</h1>
           <form onSubmit={handleSubmit(handleRegistrationSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Field>

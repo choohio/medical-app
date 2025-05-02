@@ -9,9 +9,9 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Главная', href: '/' },
-  { label: 'Новости', href: 'news' },
-  { label: 'Контакты', href: '/contacts' },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'Новости', href: '/' },
+  { label: 'Контакты', href: '/' },
+  { label: 'FAQ', href: '/' },
 ];
 
 export default function Header() {
