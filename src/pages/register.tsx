@@ -6,6 +6,7 @@ import { Button, Field, Input } from "@headlessui/react";
 import { registerUser } from "../services/auth";
 import { useRouter } from "next/router";
 import Header from "@/components/header";
+import toast from 'react-hot-toast';
 
 const registerSchema = z
   .object({
@@ -41,13 +42,22 @@ export default function Register() {
   const registerUserMutation = useMutation({
     mutationFn: registerUser,
     onSuccess: () => {
-      alert("Регистрация успешна!");
+      toast.success("Пользователь зарегистрирован")
+      router.push('/login')
     },
+    onError: (error: any) => {
+      if (error.message === "Email уже зарегистрирован") {
+        setError("email", { type: "server", message: error.message });
+      } else {
+        setError("root", { type: "server", message: error.message });
+      }
+    }
   });
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     reset,
   } = useForm<RegisterSchema>({
@@ -60,7 +70,6 @@ export default function Register() {
   const handleRegistrationSubmit = async (data: RegisterSchema) => {
     registerUserMutation.mutate(data);
     reset();
-    router.push("/login");
   };
 
   return (
@@ -217,6 +226,9 @@ export default function Register() {
                 )}
               </Field>
             </div>
+            {errors.root && (
+              <div className="text-red-500 text-sm">{errors.root.message}</div>
+            )}
             <Button
               type="submit"
               disabled={registerUserMutation.isPending}

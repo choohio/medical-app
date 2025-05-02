@@ -16,10 +16,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       await db.execute(
         `INSERT INTO users (name, email, role, password_hash) VALUES ('${name}', '${email}', '${role}', '${passwordHash}')`
       );
-
       return res.status(201).json({ message: "Пользователь зарегистрирован!" });
     } catch (error: unknown) {
       if (error instanceof Error) {
+        if (error.message.includes("UNIQUE constraint failed: users.email")) {
+          return res.status(409).json({ error: "Email уже зарегистрирован" });
+        }
         console.error(error.message);
       } else {
         console.error(error);
