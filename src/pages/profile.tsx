@@ -2,7 +2,6 @@ import Header from "@/components/header";
 import { GetServerSideProps } from "next";
 import jwt from "jsonwebtoken";
 import { parse } from "cookie";
-import { User } from "../types/user";
 import { useAuth } from "@/store/auth";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -36,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         user,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       redirect: {
         destination: "/login",
