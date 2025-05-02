@@ -16,6 +16,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const user = jwt.verify(token, JWT_SECRET);
     return res.status(200).json({ user });
   } catch (error) {
-    return res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({ message: error, error: "Invalid token" });
   }
 } 

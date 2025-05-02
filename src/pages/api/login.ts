@@ -3,6 +3,7 @@ import { db } from "../../lib/db";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
+import { DBUser } from "@/types/user";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret';
 
@@ -27,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    const user = result.rows[0] as any;
+    const user = result.rows[0] as unknown as DBUser;
 
     const passwordMatch = await bcrypt.compare(password, user['password_hash']);
     if (!passwordMatch) {

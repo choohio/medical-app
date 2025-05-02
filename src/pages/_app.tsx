@@ -23,7 +23,7 @@ function AuthInitializer() {
       }
     }
     fetchUser();
-  }, []);
+  }, [logout, setUser]);
 
   return null;
 }

@@ -18,8 +18,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       );
 
       return res.status(201).json({ message: "Пользователь зарегистрирован!" });
-    } catch (error: any) {
-      console.error(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error(error);
+      }
       return res.status(500).json({ error: "Ошибка при регистрации" });
     }
   } else {

@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../store/auth";
 import { loginUser } from "../services/auth";
 import Header from "@/components/header";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -22,7 +23,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -106,9 +106,9 @@ export default function Login() {
             <div className="mt-6 text-center text-sm">
               <p>
                 У вас ещё нет аккаунта?{" "}
-                <a href="/register" className="text-blue-600 hover:underline">
+                <Link href="/register" className="text-blue-600 hover:underline">
                   Зарегистрироваться
-                </a>
+                </Link>
               </p>
             </div>
           </div>

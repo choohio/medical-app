@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const user = useAuth((state) => state.user);
   const { news, setNews } = useNewsStore();
 
-  const { data, isLoading, isError } = useQuery<NewsItem[], Error>({
+  const { data, isLoading } = useQuery<NewsItem[], Error>({
     queryKey: ["news"],
     queryFn: () => getNews(),
   });
