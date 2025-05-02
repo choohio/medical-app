@@ -1,115 +1,165 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { NextPage } from "next";
+import { useEffect } from "react";
+import Link from "next/link";
+import Header from "../components/header";
+import { useQuery } from "@tanstack/react-query";
+import { getNews } from "@/services/news";
+import { NewsItem } from "@/types/news";
+import { useNewsStore } from "@/store/news";
+import { useAuth } from "@/store/auth";
+import clsx from "clsx";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const Home: NextPage = () => {
+  const user = useAuth((state) => state.user);
+  const { news, setNews } = useNewsStore();
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  const { data, isLoading, isError } = useQuery<NewsItem[], Error>({
+    queryKey: ["news"],
+    queryFn: () => getNews(),
+  });
 
-export default function Home() {
+  useEffect(() => {
+    if (data) {
+      setNews(data);
+    }
+  }, [data]);
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-blue-50 to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <Header />
+      <section className={clsx(user ? 'pt-10 pb-2' : "pt-32 pb-20", 'px-4')}>
+        <div className="container mx-auto max-w-4xl text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            Med<span className="text-blue-500">Connect</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
+            Медицинская помощь на расстоянии одного клика.
+          </p>
+          <p className="text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+            Простой и безопасный способ записи на прием, планирования визитов и
+            взаимодействия с медицинскими специалистами. Система гарантирует
+            конфиденциальность ваших данных и удобство использования.
+          </p>
+          {user ? (
+            <></>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/register"
+                className="px-8 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Зарегистрироваться
+              </Link>
+              <Link
+                href="/login"
+                className="px-8 py-3 text-gray-700 bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                Войти
+              </Link>
+            </div>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+      <section className="py-20 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
+        <div id="news" className="container mx-auto max-w-4xl">
+          <h2 className="text-3xl font-bold mb-12 text-center">
+            Новости и обновления
+          </h2>
+          {isLoading ? (
+            <div>Загрузка...</div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {news.map((item: NewsItem) => (
+                <div
+                  key={item.id}
+                  className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                    {item.date}
+                  </div>
+                  <h3 className="text-xl font-semibold mt-2 mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    {item.description}
+                  </p>
+                  <Link
+                    href={`/news/${item.id}`}
+                    className="inline-block mt-4 text-blue-500 hover:text-blue-600"
+                  >
+                    Читать далее
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-3xl font-bold mb-12 text-center">
+            Часто задаваемые вопросы (FAQ)
+          </h2>
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-3">
+                Как зарегистрироваться в системе?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Для регистрации на платформе нужно указать ваше имя, электронную
+                почту и выбрать роль: пациент или врач. После этого вам будет
+                предложено создать пароль для доступа к личному кабинету.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-3">
+                Как изменить мои данные?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Вы можете изменить свои данные, зайдя в личный кабинет и перейдя
+                в раздел редактирования профиля. Все изменения сохраняются сразу
+                после подтверждения.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-3">
+                Как отменить или перенести приём?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Для отмены или переноса приёма зайдите в раздел «История
+                приёмов», выберите нужный приём и воспользуйтесь функцией
+                изменения или отмены записи.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="py-20 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-3xl font-bold mb-12 text-center">
+            Контактная информация
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Наш адрес</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-2">
+                Москва, ул. Примерная, д. 25
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <strong>Телефон:</strong> +7 495 123-45-67
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                <strong>Email:</strong> info@medconnect.ru
+              </p>
+            </div>
+            <div className="h-64 md:h-auto">
+              <div className="w-full h-full bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
-}
+};
+
+export default Home;
