@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useAuth } from "@/store/auth";
 import { Toaster } from 'react-hot-toast';
+import { ThemeProvider } from "next-themes";
 
 function AuthInitializer() {
   const setUser = useAuth((s) => s.setUser);
@@ -35,7 +36,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Toaster />
       <AuthInitializer />
-      <Component {...pageProps} />
+      <ThemeProvider attribute="class">
+        <Component {...pageProps} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
