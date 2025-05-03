@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { verify } from 'jsonwebtoken'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { verify } from 'jsonwebtoken';
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value
@@ -10,14 +10,13 @@ export function middleware(request: NextRequest) {
   }
 
   try {
-    verify(token, process.env.JWT_SECRET!) // Валидация токена
+    verify(token, process.env.JWT_SECRET!) 
     return NextResponse.next()
   } catch (error) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 }
 
-// Указываем, какие маршруты защищаем
 export const config = {
-  matcher: ['/profile'], // Пример защищённого маршрута
+  matcher: ['/profile'], 
 }
