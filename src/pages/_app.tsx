@@ -1,9 +1,9 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/store/auth";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 
 function AuthInitializer() {
@@ -36,7 +36,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Toaster />
       <AuthInitializer />
-      <ThemeProvider attribute="class">
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system" 
+        enableSystem={true}
+      >
         <Component {...pageProps} />
       </ThemeProvider>
     </QueryClientProvider>
