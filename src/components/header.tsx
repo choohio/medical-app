@@ -3,15 +3,16 @@ import { useRouter } from 'next/router';
 import { useAuth } from '@/store/auth';
 
 interface NavItem {
+  id: number
   label: string;
   href: string;
 }
 
 const navItems: NavItem[] = [
-  { label: 'Главная', href: '/' },
-  { label: 'Новости', href: '/' },
-  { label: 'Контакты', href: '/' },
-  { label: 'FAQ', href: '/' },
+  { id: 1, label: 'Главная', href: '/' },
+  { id: 2, label: 'Новости', href: '/#news' },
+  { id: 3, label: 'Контакты', href: '/#contacts' },
+  { id: 4, label: 'FAQ', href: '/#faq' },
 ];
 
 export default function Header() {
@@ -40,7 +41,7 @@ export default function Header() {
         <nav className="flex-1 flex justify-center">
           <ul className="flex items-center gap-6">
             {navItems.map((item) => (
-              <li key={item.href}>
+              <li key={item.id}>
                 <Link
                   href={item.href}
                   className={`text-sm transition-colors hover:text-blue-500 ${

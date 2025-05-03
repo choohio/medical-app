@@ -60,8 +60,8 @@ const Home: NextPage = () => {
           )}
         </div>
       </section>
-      <section className="py-20 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
-        <div id="news" className="container mx-auto max-w-4xl">
+      <section id="news" className="py-20 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
+        <div className="container mx-auto max-w-4xl">
           <h2 className="text-3xl font-bold mb-12 text-center">
             Новости и обновления
           </h2>
@@ -95,7 +95,7 @@ const Home: NextPage = () => {
           )}
         </div>
       </section>
-      <section className="py-20 px-4">
+      <section id="faq" className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-3xl font-bold mb-12 text-center">
             Часто задаваемые вопросы (FAQ)
@@ -134,7 +134,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </section>
-      <section className="py-20 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
+      <section id="contacts" className="py-20 px-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-3xl font-bold mb-12 text-center">
             Контактная информация
