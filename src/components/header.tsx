@@ -17,7 +17,7 @@ const navItems: NavItem[] = [
 ];
 
 export default function Header() {
-  const { resolvedTheme, theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   const toggleTheme = () =>
     setTheme(resolvedTheme === "light" ? "dark" : "light");
