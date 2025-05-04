@@ -33,16 +33,12 @@ function AuthInitializer() {
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <AuthInitializer />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system" 
-        enableSystem={true}
-      >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <AuthInitializer />
         <Component {...pageProps} />
-      </ThemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

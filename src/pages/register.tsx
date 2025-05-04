@@ -93,15 +93,15 @@ export default function Register() {
   return (
     <div className="w-full">
       <Header />
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-yellow-100 px-4">
-        <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
-          <h1 className="mb-6 text-center text-4xl md:text-5xl font-bold">Регистрация</h1>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+          <h1 className="mb-6 text-center text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">Регистрация</h1>
           <form onSubmit={handleSubmit(handleRegistrationSubmit)}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Field>
                 <label
                   htmlFor="name"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Имя
                 </label>
@@ -109,7 +109,7 @@ export default function Register() {
                   id="name"
                   type="text"
                   placeholder="Ярополк"
-                  className="mt-1 w-full border rounded-md px-3 py-2"
+                  className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                   {...register("name")}
                 />
                 {errors.name && (
@@ -121,7 +121,7 @@ export default function Register() {
               <Field>
                 <label
                   htmlFor="surname"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Фамилия
                 </label>
@@ -129,7 +129,7 @@ export default function Register() {
                   id="surname"
                   type="text"
                   placeholder="Иванов"
-                  className="mt-1 w-full border rounded-md px-3 py-2"
+                  className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                   {...register("surname")}
                 />
                 {errors.surname && (
@@ -140,7 +140,7 @@ export default function Register() {
               </Field>
             </div>
             <div className="my-4">
-              <span className="block text-sm font-medium text-gray-700 mb-2">
+              <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Ваша роль
               </span>
               <div className="flex items-center gap-6">
@@ -149,12 +149,12 @@ export default function Register() {
                     type="radio"
                     id="role-patient"
                     value="patient"
-                    className="accent-blue-500"
+                    className="accent-blue-500 dark:accent-blue-400"
                     {...register("role")}
                   />
                   <label
                     htmlFor="role-patient"
-                    className="text-sm text-gray-700"
+                    className="text-sm text-gray-700 dark:text-gray-300"
                   >
                     Пациент
                   </label>
@@ -164,12 +164,12 @@ export default function Register() {
                     type="radio"
                     id="role-doctor"
                     value="doctor"
-                    className="accent-blue-500"
+                    className="accent-blue-500 dark:accent-blue-400"
                     {...register("role")}
                   />
                   <label
                     htmlFor="role-doctor"
-                    className="text-sm text-gray-700"
+                    className="text-sm text-gray-700 dark:text-gray-300"
                   >
                     Врач
                   </label>
@@ -184,7 +184,7 @@ export default function Register() {
             <Field className="py-2">
               <label
                 htmlFor="email"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Email адрес
               </label>
@@ -192,7 +192,7 @@ export default function Register() {
                 id="email"
                 type="email"
                 placeholder="ivanov@yandex.ru"
-                className="mt-1 w-full border rounded-md px-3 py-2"
+                className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                 {...register("email")}
               />
               {errors.email && (
@@ -206,7 +206,7 @@ export default function Register() {
               <Field>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Придумайте пароль
                 </label>
@@ -214,7 +214,7 @@ export default function Register() {
                   id="password"
                   type="password"
                   placeholder="******"
-                  className="mt-1 w-full border rounded-md px-3 py-2"
+                  className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                   {...register("password")}
                 />
                 {errors.password && (
@@ -226,7 +226,7 @@ export default function Register() {
               <Field>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Повторите пароль
                 </label>
@@ -234,7 +234,7 @@ export default function Register() {
                   id="confirmPassword"
                   type="password"
                   placeholder="******"
-                  className="mt-1 w-full border rounded-md px-3 py-2"
+                  className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                   {...register("confirmPassword")}
                 />
                 {errors.confirmPassword && (
@@ -250,7 +250,7 @@ export default function Register() {
             <Button
               type="submit"
               disabled={registerUserMutation.isPending}
-              className="mt-8 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+              className="mt-8 w-full bg-blue-600 dark:bg-blue-700 text-white py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-800 transition"
             >
               Зарегистрироваться
             </Button>
