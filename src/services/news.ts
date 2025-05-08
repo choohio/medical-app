@@ -1,8 +1,10 @@
 import type { NewsItem } from '../types/news';
+import axios from 'axios';
 
 export async function getNews(): Promise<NewsItem[]> {
-  const res = await fetch('/api/news')
-  if (!res.ok) throw new Error('Failed to fetch news')
-  const data = await res.json()
-  return data
+    const response = await axios.get('/api/news').catch((err) => {
+        throw new Error(err.message || 'Failed to fetch news');
+    });
+
+    return response.data();
 }

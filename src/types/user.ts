@@ -1,29 +1,29 @@
-type Role = 'doctor' | 'patient'
+type Role = 'doctor' | 'patient';
 
 export type User = {
-  id: number;
-  name: string;
-  email: string;
-}
+    userId: number;
+    name: string;
+    email: string;
+};
 
 export type RegisterData = {
-  name: string;
-  surname: string;
-  password: string;
-  role: Role;
-  email: string;
-}
+    name: string;
+    surname: string;
+    password: string;
+    role: Role;
+    email: string;
+};
 
 export type LoginData = {
-  email: string;
-  password: string;
-}
+    email: string;
+    password: string;
+};
 
 export type DBUser = {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  role: string;
-  password_hash: string;
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    role: string;
+    password_hash: string;
 };

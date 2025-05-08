@@ -1,40 +1,23 @@
-import { User, RegisterData, LoginData } from "@/types/user";
+import { User, RegisterData, LoginData } from '@/types/user';
+import axios from 'axios';
 
 type LoginResponse = {
-  message: string;
-  user: User;
-}
+    message: string;
+    user: User;
+};
 
 export async function registerUser(data: RegisterData) {
-  const response = await fetch('/api/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+    const response = await axios.post('/api/register', data).catch((err) => {
+        throw new Error(err.message || 'Ошибка при регистрации');
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Ошибка при регистрации');
-  }
-
-  return response.json();
+    return response.data;
 }
 
 export async function loginUser(data: LoginData): Promise<LoginResponse> {
-  const response = await fetch('/api/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+    const response = await axios.post('/api/login', data).catch((err) => {
+        throw new Error(err.message || 'Ошибка входа');
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Ошибка входа');
-  }
-
-  return response.json();
+    return response.data;
 }
