@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
         try {
             const result = await db.execute(
-                `
+                `   
     SELECT 
         a.id AS appointment_id,
         a.appointment_date,
@@ -20,7 +20,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         a.status,
         
         d.id AS doctor_id,
-        d.name AS doctor_name,
+        d.first_name AS doctor_first_name,
+        d.last_name AS doctor_last_name,
+        d.address AS doctor_address,
         d.specialty AS doctor_specialty
 
     FROM appointments a
@@ -44,7 +46,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
                 status: row.status,
                 doctor: {
                     id: row.doctor_id,
-                    name: row.doctor_name,
+                    first_name: row.doctor_first_name,
+                    last_name: row.doctor_last_name,
+                    address: row.doctor_address,
                     specialty: row.doctor_specialty,
                 },
             };

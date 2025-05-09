@@ -1,4 +1,4 @@
-import type { NewsItem } from '../types/news';
+import type { NewsItem } from '@/types/news';
 import axios from 'axios';
 
 export async function getNews(): Promise<NewsItem[]> {
@@ -6,5 +6,5 @@ export async function getNews(): Promise<NewsItem[]> {
         throw new Error(err.message || 'Failed to fetch news');
     });
 
-    return response.data();
+    return response.data;
 }

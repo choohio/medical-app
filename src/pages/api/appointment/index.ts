@@ -15,7 +15,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
                 `INSERT INTO appointments (patient_id, doctor_id, appointment_time, appointment_date, appointment_type, status) VALUES ('${patient_id}', '${doctor_id}', '${appointment_time}', '${appointment_date}', '${appointment_type}', 'scheduled')`
             );
 
-            return res.status(201).json({ message: 'Запись создана' });
+            const result = await db.execute('SELECT last_insert_rowid() as id');
+            const newId = result.rows[0].id;
+
+            return res.status(201).json({ message: 'Запись создана', id: newId });
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error(error.message);

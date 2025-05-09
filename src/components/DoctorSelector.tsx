@@ -38,7 +38,7 @@ export default function DoctorSelector({
                 <option value="">Выберите врача</option>
                 {doctors.map((doc) => (
                     <option key={doc.id} value={doc.id}>
-                        {doc.specialty} — {doc.name}
+                        {`${doc.specialty} — ${doc.first_name} ${doc.last_name}`}
                     </option>
                 ))}
             </select>
