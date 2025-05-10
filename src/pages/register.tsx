@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Field, Input } from '@headlessui/react';
-import { registerUser } from '../services/auth';
+import { registerUser } from '@/services';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { isErrorWithMessage } from '../utils/isErrorWithMessage';

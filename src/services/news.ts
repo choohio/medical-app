@@ -1,4 +1,4 @@
-import type { NewsItem } from '@/types/news';
+import type { NewsItem } from '@/types';
 import axios from 'axios';
 
 export async function getNews(): Promise<NewsItem[]> {

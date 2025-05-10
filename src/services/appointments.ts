@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Appointment } from '@/types/appointment';
+import { Appointment } from '@/types';
 import axios from 'axios';
 
 export type AppointmentData = {

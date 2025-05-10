@@ -1,20 +1,21 @@
 'use client';
-import { Doctor } from '@/types/doctor';
+import { Doctor, Appointment } from '@/types';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
-import DoctorSelector from '@/components/DoctorSelector';
-import { DateSelector } from '@/components/DateSelector';
-import { TimeSelector } from '@/components/TimeSelector';
-import { useAppointmentStore } from '@/store/appointment';
-import { useAvailableTimes, useAvailableDates, useDoctors } from '@/services/appointments';
+import { DoctorSelector, DateSelector, TimeSelector } from '@/components';
+import { useAppointmentStore, useAuth } from '@/store';
+import {
+    useAvailableTimes,
+    useAvailableDates,
+    useDoctors,
+    createAppointment,
+    AppointmentData,
+} from '@/services';
 import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '@/store/auth';
-import { createAppointment, AppointmentData } from '@/services/appointments';
-import { Appointment } from '@/types/appointment';
 import { DefaultError } from '@tanstack/query-core';
 import { isErrorWithMessage } from '@/utils/isErrorWithMessage';
 

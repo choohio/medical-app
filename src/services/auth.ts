@@ -1,4 +1,4 @@
-import { User, RegisterData, LoginData } from '@/types/user';
+import { User, RegisterData, LoginData } from '@/types';
 import axios from 'axios';
 
 type LoginResponse = {

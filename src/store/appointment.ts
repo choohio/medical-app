@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Doctor } from '@/types/doctor';
+import { Doctor } from '@/types';
 
 interface Store {
     selectedDoctor: Doctor | null;

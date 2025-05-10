@@ -2,10 +2,10 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/store/auth';
+import { useAuth } from '@/store';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from 'next-themes';
-import Layout from '../components/layout';
+import { Layout } from '@/components';
 
 function AuthInitializer() {
     const setUser = useAuth((s) => s.setUser);

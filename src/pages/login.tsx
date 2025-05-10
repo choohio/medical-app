@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
-import { useAuth } from '../store/auth';
-import { loginUser } from '../services/auth';
+import { useAuth } from '@/store';
+import { loginUser } from '@/services';
 import Link from 'next/link';
 import { NextPage } from 'next';
 

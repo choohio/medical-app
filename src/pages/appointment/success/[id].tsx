@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { DateTime } from 'luxon';
-import { useGetAppointment } from '@/services/appointments';
+import { useGetAppointment } from '@/services';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/store/auth';
+import { useAuth } from '@/store';
 
 export default function SuccessPage() {
     const router = useRouter();

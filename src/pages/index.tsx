@@ -2,10 +2,9 @@ import { NextPage } from 'next';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { getNews } from '@/services/news';
-import { NewsItem } from '@/types/news';
-import { useNewsStore } from '@/store/news';
-import { useAuth } from '@/store/auth';
+import { getNews } from '@/services';
+import { NewsItem } from '@/types';
+import { useNewsStore, useAuth } from '@/store';
 import clsx from 'clsx';
 
 const Home: NextPage = () => {

@@ -1,4 +1,4 @@
-import { Doctor } from '@/types/doctor';
+import { Doctor } from '@/types';
 
 interface DoctorSelectorProps {
     doctors: Doctor[];
@@ -8,7 +8,7 @@ interface DoctorSelectorProps {
     isLoading?: boolean;
 }
 
-export default function DoctorSelector({
+export function DoctorSelector({
     doctors,
     isLoading,
     value,
