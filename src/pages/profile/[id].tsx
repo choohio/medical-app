@@ -3,6 +3,7 @@ import { useProfile } from '@/services';
 import { useRouter } from 'next/router';
 import { useProfileStore } from '@/store';
 import { UserIcon } from '@heroicons/react/24/outline';
+// eslint-disable-next-line react-hooks/exhaustive-deps
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/store';
@@ -74,11 +75,16 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="mt-6 flex flex-col sm:flex-row gap-4">
-                            <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 py-2 text-sm font-medium">
-                                Записаться на приём
-                            </button>
+                            <Link
+  href="/appointment/new"
+  className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 py-2 text-sm font-medium text-center"
+>
+  Записаться на приём
+</Link>
                             <button className="border border-gray-300 hover:bg-gray-100 text-gray-700 rounded-xl px-6 py-2 text-sm font-medium">
-                                Перейти к истории приёмов
+                                <Link
+  href="/appointment/history">
+                                Перейти к истории приёмов</Link>
                             </button>
                         </div>
                     </div>
