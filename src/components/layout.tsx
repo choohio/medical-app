@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Header } from './Header';
+import { Header } from './header';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({
