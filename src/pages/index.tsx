@@ -140,7 +140,7 @@ const Home: NextPage = () => {
                         <div>
                             <h3 className="text-xl font-semibold mb-4">Наш адрес</h3>
                             <p className="text-gray-600 dark:text-gray-300 mb-2">
-                                Москва, ул. Примерная, д. 25
+                                Москва, ул. Льва Толстого, д. 16
                             </p>
                             <p className="text-gray-600 dark:text-gray-300 mb-4">
                                 <strong>Телефон:</strong> +7 495 123-45-67
@@ -150,7 +150,7 @@ const Home: NextPage = () => {
                             </p>
                         </div>
                         <div className="h-64 md:h-auto">
-                            <div className="w-full h-full bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                            <div className="w-full h-full overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700"><iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A62b667767d2c095afa43ae9ba0af648239d91c6b61100101e30a040ac4360d4e&amp;source=constructor" width="100%" height="240"></iframe></div>
                         </div>
                     </div>
                 </div>
