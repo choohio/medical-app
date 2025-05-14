@@ -1,5 +1,5 @@
-import { useProfile, useUpdateProfile } from '@/services';
-import { useState, useEffect } from 'react';
+import { useUpdateProfile } from '@/services';
+import { useState } from 'react';
 import {
     UserIcon,
     PhoneIcon,
@@ -13,7 +13,7 @@ export default function EditProfilePage() {
     const router = useRouter();
     const { id } = router.query;
 
-    const { data } = useProfile(id as string);
+    // const { data } = useProfile(id as string);
     const updateProfile = useUpdateProfile(id as string);
 
     const [form, setForm] = useState({
@@ -25,11 +25,11 @@ export default function EditProfilePage() {
         snils: '',
     });
 
-    useEffect(() => {
-        if (data) {
-            setForm(data);
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (data) {
+    //         setForm(data);
+    //     }
+    // }, [data]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setForm({ ...form, [e.target.name]: e.target.value });

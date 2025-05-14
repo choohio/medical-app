@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Appointment } from '@/types';
+import { Appointment, Doctor } from '@/types';
 import axios from 'axios';
 
 export type AppointmentData = {
@@ -27,13 +27,28 @@ export async function createAppointment(data: AppointmentData): Promise<Appointm
     return response.data;
 }
 
+interface GetAppointmentsResult extends Appointment {
+    doctor: Doctor;
+}
+
 export const useGetAppointment = (appointmentId: string) =>
-    useQuery({
+    useQuery<GetAppointmentsResult>({
         queryKey: ['useGetAppointment', appointmentId],
         enabled: !!appointmentId,
         queryFn: async () => {
             if (!appointmentId) return [];
             const { data } = await axios.get(`/api/appointment/${appointmentId}`);
+            return data;
+        },
+    });
+
+export const useGetAppointmentsByUserId = (userId: string) =>
+    useQuery<GetAppointmentsResult[]>({
+        queryKey: ['useGetAppointmentsByUser', userId],
+        enabled: !!userId,
+        queryFn: async () => {
+            if (!userId) return [];
+            const { data } = await axios.get(`/api/appointment/user/${userId}`);
             return data;
         },
     });

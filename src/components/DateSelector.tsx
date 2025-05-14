@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon';
+import { formatDate } from '@/utils/formatDate';
 
 interface DateSelectorProps {
     value: string;
@@ -22,10 +22,6 @@ export const DateSelector = ({
     if (!availableDates) {
         return null;
     }
-
-    const formatDate = (dateString: string) => {
-        return DateTime.fromISO(dateString, { locale: 'ru' }).toFormat('d MMMM (cccc)');
-    };
 
     return (
         <div className="w-full">

@@ -4,7 +4,7 @@ import { db } from '../../lib/db';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const { name, email, password, role } = req.body;
+        const { name, surname, email, password, role } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ error: 'Email и пароль обязательны' });
@@ -16,7 +16,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             const tx = await db.transaction();
 
             await tx.execute(
-                `INSERT INTO users (name, email, role, password_hash) VALUES ('${name}', '${email}', '${role}', '${passwordHash}')`
+                `INSERT INTO users (first_name, last_name, email, role, password_hash) VALUES ('${name}', '${surname}', '${email}', '${role}', '${passwordHash}')`
             );
 
             const result = await tx.execute('SELECT last_insert_rowid() as id');

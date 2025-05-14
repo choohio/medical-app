@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json({
             message: 'Login successful',
             user: {
-                id: user.id,
+                userId: user.id,
                 email: user.email,
                 name: user.name,
             },

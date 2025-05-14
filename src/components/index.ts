@@ -3,3 +3,4 @@ export { DoctorSelector } from './DoctorSelector';
 export { Header } from './header';
 export { TimeSelector } from './TimeSelector';
 export { Layout } from './layout';
+export { Skeleton } from './Skeleton';

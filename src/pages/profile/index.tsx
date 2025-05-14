@@ -1,0 +1,115 @@
+import { useEffect } from 'react';
+import { useProfile, useGetAppointmentsByUserId } from '@/services';
+import { useProfileStore } from '@/store';
+import { UserIcon } from '@heroicons/react/24/outline';
+// eslint-disable-next-line react-hooks/exhaustive-deps
+import Link from 'next/link';
+import { useAuth } from '@/store';
+import { formatDate } from '@/utils/formatDate';
+import { Skeleton } from '@/components';
+
+export default function ProfilePage() {
+    const user = useAuth((state) => state.user);
+
+    const { data, isLoading } = useProfile(String(user?.userId));
+    const { data: appointments, isLoading: isLoadingAppointments } = useGetAppointmentsByUserId(
+        String(user?.userId)
+    );
+
+    const setProfile = useProfileStore((s) => s.setProfile);
+
+    useEffect(() => {
+        if (data) {
+            setProfile(data);
+        }
+    }, [data]);
+
+    if (isLoading) return <div className="text-center mt-10">Загрузка...</div>;
+
+    if (!data) {
+        return null;
+    }
+
+    const name = data.first_name ? `${data.last_name} ${data.first_name}` : 'Имя не указано';
+
+    return (
+        <main className="min-h-screen bg-gray-50 p-4">
+            <div className="max-w-4xl mx-auto mt-8">
+                <h1 className="text-2xl font-semibold mb-6">Личный кабинет</h1>
+
+                <div className="bg-white rounded-2xl shadow p-6 flex flex-col md:flex-row gap-6 items-center">
+                    <div className="flex-1 space-y-2 w-full">
+                        <div className="flex justify-between items-start">
+                            <div className="flex gap-4">
+                                <UserIcon
+                                    height={80}
+                                    width={80}
+                                    className="rounded-full bg-gray-400"
+                                />
+                                <div>
+                                    <h2 className="text-lg font-semibold">{name}</h2>
+                                    <p className="text-gray-600">{user?.email}</p>
+                                    <p className="text-gray-600">
+                                        {data?.phone || '+7 ___ ___ __ __'}
+                                    </p>
+                                </div>
+                            </div>
+                            <Link
+                                href={`/profile/edit/${user?.userId}`}
+                                className="text-blue-500 hover:underline text-sm"
+                            >
+                                Редактировать
+                            </Link>
+                        </div>
+
+                        {isLoadingAppointments && <Skeleton height={188} />}
+
+                        {appointments?.length && !isLoadingAppointments ? (
+                            <div className="bg-gray-100 rounded-xl p-4 mt-4">
+                                <h3 className="font-semibold mb-2">Ближайшая запись</h3>
+                                <p className="text-sm text-gray-700">
+                                    {appointments[0].doctor.specialty}
+                                </p>
+                                <p className="text-sm text-gray-900 font-medium">
+                                    {`${appointments[0].doctor.first_name} ${appointments[0].doctor.last_name}`}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    Место встречи:
+                                    {appointments[0].appointment_type === 'online'
+                                        ? 'Онлайн'
+                                        : appointments[0].doctor.address}
+                                </p>
+
+                                <div className="flex justify-between items-center mt-3">
+                                    <span className="text-gray-500 text-sm">
+                                        {formatDate(appointments[0].appointment_date)}
+                                    </span>
+                                    <span className="text-green-600 font-semibold text-lg">
+                                        {appointments[0].appointment_time}
+                                    </span>
+                                </div>
+                                <div className="text-right text-sm mt-1">
+                                    <button className="text-blue-500 hover:underline">
+                                        Изменить время приёма
+                                    </button>
+                                </div>
+                            </div>
+                        ) : null}
+
+                        <div className="mt-6 flex flex-col sm:flex-row gap-4">
+                            <Link
+                                href="/appointment"
+                                className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-6 py-2 text-sm font-medium text-center"
+                            >
+                                Записаться на приём
+                            </Link>
+                            <button className="border border-gray-300 hover:bg-gray-100 text-gray-700 rounded-xl px-6 py-2 text-sm font-medium">
+                                <Link href="history">Перейти к истории приёмов</Link>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    );
+}

@@ -20,6 +20,7 @@ const Home: NextPage = () => {
         if (data) {
             setNews(data);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     return (
@@ -150,7 +151,13 @@ const Home: NextPage = () => {
                             </p>
                         </div>
                         <div className="h-64 md:h-auto">
-                            <div className="w-full h-full overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700"><iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A62b667767d2c095afa43ae9ba0af648239d91c6b61100101e30a040ac4360d4e&amp;source=constructor" width="100%" height="240"></iframe></div>
+                            <div className="w-full h-full overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
+                                <iframe
+                                    src="https://yandex.ru/map-widget/v1/?um=constructor%3A62b667767d2c095afa43ae9ba0af648239d91c6b61100101e30a040ac4360d4e&amp;source=constructor"
+                                    width="100%"
+                                    height="240"
+                                ></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 export interface Profile {
-    full_name: string;
+    first_name: string;
+    last_name: string;
     gender: string;
     birth_date: string;
     phone: string;
