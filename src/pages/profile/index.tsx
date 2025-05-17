@@ -4,16 +4,17 @@ import { useProfileStore } from '@/store';
 import { UserIcon } from '@heroicons/react/24/outline';
 // eslint-disable-next-line react-hooks/exhaustive-deps
 import Link from 'next/link';
-import { useAuth } from '@/store';
 import { formatDate } from '@/utils/formatDate';
 import { Skeleton } from '@/components';
+import { useSession } from 'next-auth/react';
 
 export default function ProfilePage() {
-    const user = useAuth((state) => state.user);
+    const { data: session, status } = useSession();
+    const user = session?.user;
 
-    const { data, isLoading } = useProfile(String(user?.userId));
+    const { data, isLoading } = useProfile(String(user?.id));
     const { data: appointments, isLoading: isLoadingAppointments } = useGetAppointmentsByUserId(
-        String(user?.userId)
+        String(user?.id)
     );
 
     const setProfile = useProfileStore((s) => s.setProfile);
@@ -55,7 +56,7 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                             <Link
-                                href={`/profile/edit/${user?.userId}`}
+                                href={`/profile/edit/${user?.id}`}
                                 className="text-blue-500 hover:underline text-sm"
                             >
                                 Редактировать

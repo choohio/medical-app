@@ -19,6 +19,7 @@ import {
   SunIcon,
   MoonIcon,
 } from '@heroicons/react/24/outline';
+import { useSession, signOut } from "next-auth/react";
 
 const navItems = [
   { id: 1, label: 'Главная', href: '/' },
@@ -28,6 +29,7 @@ const navItems = [
 ];
 
 export function Header() {
+  const { data: session, status } = useSession();
   const { resolvedTheme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [zoomEnabled, setZoomEnabled] = useState(false);
@@ -53,13 +55,11 @@ export function Header() {
   }, []);
 
   const router = useRouter();
-  const user = useAuth((s) => s.user);
+  const user = session?.user;
   const logout = useAuth((s) => s.clearUser);
 
   const handleLogout = async () => {
-    await fetch('/api/logout', { method: 'POST' });
-    router.push('/');
-    logout();
+    signOut({ callbackUrl: '/' });
   };
 
   return (
@@ -128,7 +128,7 @@ export function Header() {
             <>
               <Link href="/profile">
                 <span className="text-sm text-gray-600 dark:text-gray-300">
-                  {user?.firstName}
+                  {user?.email}
                 </span>
               </Link>
               <button

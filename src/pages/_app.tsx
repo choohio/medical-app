@@ -7,42 +7,21 @@ import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from 'next-themes';
 import { Layout } from '@/components';
 import { useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react"
 
-function AuthInitializer() {
-    const setUser = useAuth((s) => s.setUser);
-    const logout = useAuth((s) => s.clearUser);
-
-    useEffect(() => {
-        async function fetchUser() {
-            try {
-                const res = await fetch('/api/me');
-                if (res.ok) {
-                    const data = await res.json();
-                    setUser(data.user);
-                } else {
-                    logout();
-                }
-            } catch {
-                logout();
-            }
-        }
-        fetchUser();
-    }, [logout, setUser]);
-
-    return null;
-}
-
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     const [queryClient] = useState(() => new QueryClient());
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
-            <QueryClientProvider client={queryClient}>
-                <Toaster />
-                <AuthInitializer />
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-            </QueryClientProvider>
-        </ThemeProvider>
+        <SessionProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
+                <QueryClientProvider client={queryClient}>
+                    <Toaster />
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </QueryClientProvider>
+            </ThemeProvider>
+        </SessionProvider>
+        
     );
 }

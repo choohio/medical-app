@@ -2,16 +2,22 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/store';
-import { loginUser } from '@/services';
+import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import { NextPage } from 'next';
+import { useSession } from "next-auth/react";
 
 const Login: NextPage = () => {
     const router = useRouter();
+    const error = router.query.error;
 
-    const setUser = useAuth((s) => s.setUser);
+    const errorMessages: Record<string, string> = {
+        EmailRequired: "Email обязателен",
+        UserNotFound: "Пользователь не найден",
+        InvalidPassword: "Неверный пароль",
+        CredentialsSignin: "Ошибка авторизации",
+    };
 
     const loginSchema = z.object({
         password: z.string().min(1, { message: 'Введите пароль' }),
@@ -24,20 +30,13 @@ const Login: NextPage = () => {
         resolver: zodResolver(loginSchema),
     });
 
-    const loginMutation = useMutation({
-        mutationFn: loginUser,
-        onSuccess: (data) => {
-            setUser(data.user);
-            router.push('/profile');
-        },
-        onError: (err: Error) => {
-            alert(err.message);
-        },
-    });
-
-    const handleLoginSubmit = (data: LoginSchema) => {
-        loginMutation.mutate(data);
-        reset();
+    const onSubmit = async (data: LoginSchema) => {
+        const result = await signIn("credentials", {
+            redirect: true, 
+            email: data.email,
+            password: data.password,
+            callbackUrl: "/profile"
+        });
     };
 
     return (
@@ -48,7 +47,8 @@ const Login: NextPage = () => {
                         <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
                             Вход в аккаунт
                         </h2>
-                        <form onSubmit={handleSubmit(handleLoginSubmit)} className="space-y-4">
+                        {error && <p style={{ color: "red" }}>{errorMessages[String(error)] || "Неизвестная ошибка"}</p>}
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                             <div>
                                 <label
                                     htmlFor="email"
@@ -57,7 +57,7 @@ const Login: NextPage = () => {
                                     Email
                                 </label>
                                 <input
-                                    {...register('email')}
+                                    {...register('email', { required: true })}
                                     id="email"
                                     type="email"
                                     placeholder="ivanov@yandex.ru"
@@ -72,7 +72,7 @@ const Login: NextPage = () => {
                                     Пароль
                                 </label>
                                 <input
-                                    {...register('password')}
+                                    {...register('password', { required: true })}
                                     id="password"
                                     type="password"
                                     placeholder="******"
