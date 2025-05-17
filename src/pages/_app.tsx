@@ -6,10 +6,11 @@ import { useAuth } from '@/store';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from 'next-themes';
 import { Layout } from '@/components';
+import { useSession } from "next-auth/react";
 
 function AuthInitializer() {
     const setUser = useAuth((s) => s.setUser);
-    const logout = useAuth((s) => s.logout);
+    const logout = useAuth((s) => s.clearUser);
 
     useEffect(() => {
         async function fetchUser() {

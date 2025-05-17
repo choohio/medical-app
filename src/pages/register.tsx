@@ -10,8 +10,8 @@ import { isErrorWithMessage } from '../utils/isErrorWithMessage';
 
 const registerSchema = z
     .object({
-        name: z.string().min(1, { message: 'Введите имя' }).max(20, 'Имя слишком длинное'),
-        surname: z
+        firstName: z.string().min(1, { message: 'Введите имя' }).max(20, 'Имя слишком длинное'),
+        lastName: z
             .string()
             .min(1, { message: 'Введите фамилию' })
             .max(20, 'Фамилия слишком длинная'),
@@ -92,11 +92,11 @@ export default function Register() {
                                     type="text"
                                     placeholder="Ярополк"
                                     className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
-                                    {...register('name')}
+                                    {...register('firstName')}
                                 />
-                                {errors.name && (
+                                {errors.firstName && (
                                     <span role="alert" className="text-red-500 text-sm">
-                                        {errors.name.message}
+                                        {errors.firstName.message}
                                     </span>
                                 )}
                             </Field>
@@ -112,11 +112,11 @@ export default function Register() {
                                     type="text"
                                     placeholder="Иванов"
                                     className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
-                                    {...register('surname')}
+                                    {...register('lastName')}
                                 />
-                                {errors.surname && (
+                                {errors.lastName && (
                                     <span role="alert" className="text-red-500 text-sm">
-                                        {errors.surname.message}
+                                        {errors.lastName.message}
                                     </span>
                                 )}
                             </Field>

@@ -2,13 +2,13 @@ type Role = 'doctor' | 'patient';
 
 export type User = {
     userId: number;
-    name: string;
+    firstName: string;
     email: string;
 };
 
 export type RegisterData = {
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
     password: string;
     role: Role;
     email: string;

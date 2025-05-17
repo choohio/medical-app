@@ -4,30 +4,35 @@ import { db } from '../../lib/db';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const { name, surname, email, password, role } = req.body;
+        const { firstName, lastName, email, password, role } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({ error: 'Email и пароль обязательны' });
         }
 
-        const passwordHash = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const tx = await db.transaction();
 
         try {
-            const tx = await db.transaction();
-
-            await tx.execute(
-                `INSERT INTO users (first_name, last_name, email, role, password_hash) VALUES ('${name}', '${surname}', '${email}', '${role}', '${passwordHash}')`
+            const result = await tx.execute({
+                sql: `INSERT INTO users (email, password_hash, role, created_at) VALUES (?, ?, ?, ?)`,
+                args: [email, hashedPassword, role, new Date().toISOString()]
+            }
             );
 
-            const result = await tx.execute('SELECT last_insert_rowid() as id');
-            const userId = result.rows[0].id;
+            const userId = result.lastInsertRowid;
 
-            await tx.execute(`INSERT INTO patient_profiles (user_id) VALUES ('${userId}')`);
+            await tx.execute({
+                sql: `INSERT INTO patient_profiles (user_id, first_name, last_name) VALUES (?, ?, ?)`,
+                args: [userId, firstName, lastName]
+            }   
+            );
 
             await tx.commit();
 
             return res.status(201).json({ message: 'Пользователь зарегистрирован!' });
         } catch (error: unknown) {
+            await tx.rollback();
             if (error instanceof Error) {
                 if (error.message.includes('UNIQUE constraint failed: users.email')) {
                     return res.status(409).json({ error: 'Email уже зарегистрирован' });
