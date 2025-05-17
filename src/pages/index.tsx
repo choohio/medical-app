@@ -5,10 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 import { getNews } from '@/services';
 import { NewsItem } from '@/types';
 import { useNewsStore, useAuth } from '@/store';
+import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
 
 const Home: NextPage = () => {
-    const user = useAuth((state) => state.user);
+    const { data: session, status } = useSession();
+    const user = session?.user;
     const { news, setNews } = useNewsStore();
 
     const { data, isLoading } = useQuery<NewsItem[], Error>({
