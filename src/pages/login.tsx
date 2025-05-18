@@ -6,19 +6,15 @@ import { useAuth } from '@/store';
 import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import { NextPage } from 'next';
+import { useState } from 'react';
 import { useSession } from "next-auth/react";
 
 const Login: NextPage = () => {
+    const [isLoading, setIsLoading] = useState(false);
+
     const router = useRouter();
-    const error = router.query.error;
 
-    const errorMessages: Record<string, string> = {
-        EmailRequired: "Email обязателен",
-        UserNotFound: "Пользователь не найден",
-        InvalidPassword: "Неверный пароль",
-        CredentialsSignin: "Ошибка авторизации",
-    };
-
+    
     const loginSchema = z.object({
         password: z.string().min(1, { message: 'Введите пароль' }),
         email: z.string().min(1, { message: 'Введите email' }),
@@ -26,18 +22,68 @@ const Login: NextPage = () => {
 
     type LoginSchema = z.infer<typeof loginSchema>;
 
-    const { register, handleSubmit, reset } = useForm<LoginSchema>({
+    const { register, handleSubmit, setError, formState: { errors }, reset } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
     });
 
     const onSubmit = async (data: LoginSchema) => {
+        setIsLoading(true);
+
         const result = await signIn("credentials", {
-            redirect: true, 
+            redirect: false, 
             email: data.email,
-            password: data.password,
-            callbackUrl: "/profile"
+            password: data.password
         });
+
+        if (result?.error) {
+            // Устанавливаем ошибку для всей формы
+            setError('root', { 
+                type: 'manual',
+                message: getErrorMessage(result.error),
+            });
+            setIsLoading(false);
+            } else {
+                router.push(result?.url || '/profile');
+            }
     };
+
+    const getErrorMessage = (errorCode: string) => {
+        const errorMessages: Record<string, string> = {
+            EmailRequired: "Email обязателен",
+            UserNotFound: "Пользователь не найден",
+            InvalidPassword: "Неверный пароль",
+            CredentialsSignin: "Ошибка авторизации",
+        };
+    
+        return errorMessages[errorCode] || errorMessages.Default;
+    };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <svg
+                className="animate-spin h-10 w-10 text-blue-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                >
+                <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                />
+                <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+                </svg>
+            </div>
+            );
+        }
 
     return (
         <div>
@@ -47,7 +93,6 @@ const Login: NextPage = () => {
                         <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
                             Вход в аккаунт
                         </h2>
-                        {error && <p style={{ color: "red" }}>{errorMessages[String(error)] || "Неизвестная ошибка"}</p>}
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                             <div>
                                 <label
@@ -63,6 +108,7 @@ const Login: NextPage = () => {
                                     placeholder="ivanov@yandex.ru"
                                     className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                                 />
+                                {errors.email && <span role="alert" className="text-red-500 text-sm">{errors.email.message}</span>}
                             </div>
                             <div>
                                 <label
@@ -78,6 +124,7 @@ const Login: NextPage = () => {
                                     placeholder="******"
                                     className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                                 />
+                                {errors.password && <span role="alert" className="text-red-500 text-sm">{errors.password.message}</span>}
                                 <div className="text-right text-sm mt-1">
                                     <a
                                         href="#"
@@ -87,7 +134,7 @@ const Login: NextPage = () => {
                                     </a>
                                 </div>
                             </div>
-
+                            {errors.root && <span role="alert" className="text-red-500 text-sm">{errors.root.message}</span>}
                             <button
                                 type="submit"
                                 className="w-full bg-blue-600 dark:bg-blue-700 text-white py-2 rounded-md hover:bg-blue-700 dark:hover:bg-blue-800 transition"
@@ -99,8 +146,8 @@ const Login: NextPage = () => {
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                 Войти с помощью
                             </p>
-                            <button className="mt-2 bg-blue-100 dark:bg-gray-800 hover:bg-blue-200 dark:hover:bg-gray-700 text-blue-800 dark:text-blue-300 font-semibold px-4 py-2 rounded-full">
-                                <span className="text-lg">ВК</span>
+                            <button onClick={() => signIn("yandex")} className="mt-2 bg-blue-100 dark:bg-gray-800 hover:bg-blue-200 dark:hover:bg-gray-700 text-blue-800 dark:text-blue-300 font-semibold px-4 py-2 rounded-full">
+                                <span className="text-lg">Я</span>
                             </button>
                         </div>
                         <div className="mt-6 text-center text-sm">
