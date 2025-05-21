@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1747821974043,
+      "tag": "0000_curvy_ted_forrester",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1747823324273,
+      "tag": "0001_wise_xavin",
+      "breakpoints": true
+    }
+  ]
+}

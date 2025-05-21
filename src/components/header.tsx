@@ -57,6 +57,7 @@ export function Header() {
   const router = useRouter();
   const user = session?.user;
   const logout = useAuth((s) => s.clearUser);
+  console.log(session)
 
   const handleLogout = async () => {
     signOut({ callbackUrl: '/' });
