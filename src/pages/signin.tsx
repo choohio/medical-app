@@ -2,12 +2,10 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/store';
 import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { useSession } from "next-auth/react";
 
 const Login: NextPage = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +28,7 @@ const Login: NextPage = () => {
         setIsLoading(true);
 
         const result = await signIn("credentials", {
-            redirect: false, 
+            callbackUrl: '/profile', 
             email: data.email,
             password: data.password
         });
@@ -125,14 +123,16 @@ const Login: NextPage = () => {
                                     className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                                 />
                                 {errors.password && <span role="alert" className="text-red-500 text-sm">{errors.password.message}</span>}
-                                <div className="text-right text-sm mt-1">
-                                    <a
-                                        href="#"
-                                        className="text-blue-600 dark:text-blue-400 hover:underline"
-                                    >
-                                        Забыли пароль?
-                                    </a>
-                                </div>
+                                <Link href={"/forgot-password"}>
+                                    <div className="text-right text-sm mt-1">
+                                        <p
+                                            className="text-blue-600 dark:text-blue-400 hover:underline"
+                                        >
+                                            Забыли пароль?
+                                        </p>
+                                    </div>
+                                </Link>
+                                
                             </div>
                             {errors.root && <span role="alert" className="text-red-500 text-sm">{errors.root.message}</span>}
                             <button

@@ -1,20 +1,4 @@
-CREATE TABLE `account` (
-	`userId` text NOT NULL,
-	`type` text NOT NULL,
-	`provider` text NOT NULL,
-	`providerAccountId` text NOT NULL,
-	`refresh_token` text,
-	`access_token` text,
-	`expires_at` integer,
-	`token_type` text,
-	`scope` text,
-	`id_token` text,
-	`session_state` text,
-	PRIMARY KEY(`provider`, `providerAccountId`),
-	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
-CREATE TABLE `doctor_profiles` (
+CREATE TABLE `doctor_profile` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` text NOT NULL,
 	`first_name` text,
@@ -30,7 +14,15 @@ CREATE TABLE `news` (
 	`date` text
 );
 --> statement-breakpoint
-CREATE TABLE `patient_profiles` (
+CREATE TABLE `password_reset_tokens` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`user_id` text NOT NULL,
+	`token` text NOT NULL,
+	`expires_at` text NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `patient_profile` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` text NOT NULL,
 	`first_name` text,
@@ -39,13 +31,6 @@ CREATE TABLE `patient_profiles` (
 	`gender` text,
 	`birthday` text,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `session` (
-	`sessionToken` text PRIMARY KEY NOT NULL,
-	`userId` text NOT NULL,
-	`expires` integer NOT NULL,
-	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `user` (

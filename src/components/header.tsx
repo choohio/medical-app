@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/store';
+import { useProfile } from '@/services';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
@@ -29,7 +29,6 @@ const navItems = [
 ];
 
 export function Header() {
-  const { data: session, status } = useSession();
   const { resolvedTheme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [zoomEnabled, setZoomEnabled] = useState(false);
@@ -47,6 +46,11 @@ export function Header() {
     });
   };
 
+  const { data: session } = useSession();
+    const userId = session?.user?.id;
+
+    const { data: profile, isLoading } = useProfile(String(userId));
+
   useEffect(() => {
     setMounted(true);
     if (typeof window !== 'undefined') {
@@ -55,9 +59,6 @@ export function Header() {
   }, []);
 
   const router = useRouter();
-  const user = session?.user;
-  const logout = useAuth((s) => s.clearUser);
-  console.log(session)
 
   const handleLogout = async () => {
     signOut({ callbackUrl: '/' });
@@ -125,11 +126,11 @@ export function Header() {
 
         {/* Пользователь */}
         <div className="flex-1 flex justify-end items-center gap-4">
-          {user && (
+          {session?.user && (
             <>
               <Link href="/profile">
                 <span className="text-sm text-gray-600 dark:text-gray-300">
-                  {user?.email}
+                  {profile?.first_name} {profile?.last_name}
                 </span>
               </Link>
               <button

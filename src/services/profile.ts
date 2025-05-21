@@ -4,7 +4,7 @@ import { Profile } from '@/types';
 
 export const useProfile = (userId?: string) => {
     return useQuery<Profile>({
-        queryKey: ['profile', userId],
+        queryKey: ['profile', userId as string],
         enabled: !!userId,
         queryFn: async () => {
             const { data } = await axios.get(`/api/profile/${userId}`);

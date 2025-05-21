@@ -37,7 +37,7 @@ export default function Register() {
         mutationFn: registerUser,
         onSuccess: () => {
             toast.success('Пользователь зарегистрирован');
-            router.push('/login');
+            router.push('/signin');
         },
         onError: (error: unknown) => {
             if (isErrorWithMessage(error)) {

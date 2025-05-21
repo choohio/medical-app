@@ -1,4 +1,5 @@
-import NextAuth, { NextAuthOptions, Session, User, Account, Profile } from "next-auth";
+import NextAuth, { NextAuthOptions, Session, User, DefaultSession, DefaultUser } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import YandexProvider from "next-auth/providers/yandex";
 import { compare } from "bcrypt";
@@ -6,6 +7,27 @@ import { eq } from 'drizzle-orm';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import * as schema from '../../../../db/schema';
 import { db } from '../../../../db/db';
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string; // Add id to session user
+      name?: string | null; // Ensure name is included and nullable
+      email?: string | null; // Ensure email is included and nullable
+      image?: string | null; // Ensure image is included and nullable
+    } & DefaultSession['user'];
+  }
+
+  interface User extends DefaultUser {
+    id: string; // Ensure id is string in User type
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string; // Add id to JWT token
+  }
+}
 
 const adapter = DrizzleAdapter(db);
 
@@ -28,8 +50,8 @@ export const authOptions: NextAuthOptions = {
     
         const result = await db
           .select()
-          .from(schema.users)
-          .where(eq(schema.users.email, email));
+          .from(schema.user)
+          .where(eq(schema.user.email, email));
     
         const user = result[0];
     
@@ -44,13 +66,7 @@ export const authOptions: NextAuthOptions = {
         }
         console.log(user)
     
-        return {
-          id: user.id,
-          name: user.name ?? null,
-          email: user.email,
-          emailVerified: user.emailVerified,
-          image: user.image ?? null,
-        };
+        return user
       },
     }),
     YandexProvider({
@@ -59,7 +75,18 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id; // сохраняем id в токен
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session?.user && token?.id) {
+        session.user.id = token.id; // берем id из токена
+      }
+      return session;
+    },
   },
   debug: true,
   session: {

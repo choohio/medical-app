@@ -2,36 +2,37 @@ import { useEffect } from 'react';
 import { useProfile, useGetAppointmentsByUserId } from '@/services';
 import { useProfileStore } from '@/store';
 import { UserIcon } from '@heroicons/react/24/outline';
-// eslint-disable-next-line react-hooks/exhaustive-deps
 import Link from 'next/link';
 import { formatDate } from '@/utils/formatDate';
 import { Skeleton } from '@/components';
 import { useSession } from 'next-auth/react';
 
 export default function ProfilePage() {
-    const { data: session, status } = useSession();
-    const user = session?.user;
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
 
-    const { data, isLoading } = useProfile(String(user?.id));
+    const { data: profile, isLoading } = useProfile(String(userId));
     const { data: appointments, isLoading: isLoadingAppointments } = useGetAppointmentsByUserId(
-        String(user?.id)
+        String(userId)
     );
 
-    const setProfile = useProfileStore((s) => s.setProfile);
+    const setProfile = useProfileStore((state) => state.setProfile);
 
     useEffect(() => {
-        if (data) {
-            setProfile(data);
+        if (profile) {
+            setProfile(profile);
         }
-    }, [data]);
+    }, [profile, setProfile]);
 
     if (isLoading) return <div className="text-center mt-10">Загрузка...</div>;
 
-    if (!data) {
+    if (!profile) {
         return null;
     }
 
-    const name = data.first_name ? `${data.last_name} ${data.first_name}` : 'Имя не указано';
+    const name = profile?.first_name
+        ? `${profile?.first_name} ${profile?.last_name}`
+        : 'Имя не указано';
 
     return (
         <main className="min-h-screen bg-gray-50 p-4 dark:bg-gray-900">
@@ -48,15 +49,19 @@ export default function ProfilePage() {
                                     className="rounded-full bg-gray-400 dark:bg-gray-600"
                                 />
                                 <div>
-                                    <h2 className="text-lg font-semibold dark:text-white">{name}</h2>
-                                    <p className="text-gray-600 dark:text-gray-300">{user?.email}</p>
+                                    <h2 className="text-lg font-semibold dark:text-white">
+                                        {name}
+                                    </h2>
                                     <p className="text-gray-600 dark:text-gray-300">
-                                        {data?.phone || '+7 ___ ___ __ __'}
+                                        {session?.user.email}
+                                    </p>
+                                    <p className="text-gray-600 dark:text-gray-300">
+                                        {profile?.phone || '+7 ___ ___ __ __'}
                                     </p>
                                 </div>
                             </div>
                             <Link
-                                href={`/profile/edit/${user?.id}`}
+                                href={`/profile/edit/${userId}`}
                                 className="text-blue-500 hover:underline text-sm dark:text-blue-400"
                             >
                                 Редактировать
@@ -67,7 +72,9 @@ export default function ProfilePage() {
 
                         {appointments?.length && !isLoadingAppointments ? (
                             <div className="bg-gray-100 rounded-xl p-4 mt-4 dark:bg-gray-700">
-                                <h3 className="font-semibold mb-2 dark:text-white">Ближайшая запись</h3>
+                                <h3 className="font-semibold mb-2 dark:text-white">
+                                    Ближайшая запись
+                                </h3>
                                 <p className="text-sm text-gray-700 dark:text-gray-200">
                                     {appointments[0].doctor.specialty}
                                 </p>
