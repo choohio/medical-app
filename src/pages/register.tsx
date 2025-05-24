@@ -73,26 +73,26 @@ export default function Register() {
 
     return (
         <div className="w-full">
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
-                <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+            <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
+                <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 mt-10 mb-10">
                     <h1 className="mb-6 text-center text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
                         Регистрация
                     </h1>
-                    <form onSubmit={handleSubmit(handleRegistrationSubmit)}>
+                    <form onSubmit={handleSubmit(handleRegistrationSubmit)} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Field>
                                 <label
-                                    htmlFor="name"
+                                    htmlFor="first-name"
                                     className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
                                     Имя
                                 </label>
                                 <Input
-                                    id="name"
-                                    type="text"
-                                    placeholder="Ярополк"
-                                    className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                                     {...register('firstName')}
+                                    id="first-name"
+                                    type="text"
+                                    placeholder="Имя"
+                                    className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                                 />
                                 {errors.firstName && (
                                     <span role="alert" className="text-red-500 text-sm">
@@ -102,17 +102,17 @@ export default function Register() {
                             </Field>
                             <Field>
                                 <label
-                                    htmlFor="surname"
+                                    htmlFor="last-name"
                                     className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                                 >
                                     Фамилия
                                 </label>
                                 <Input
-                                    id="surname"
-                                    type="text"
-                                    placeholder="Иванов"
-                                    className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                                     {...register('lastName')}
+                                    id="last-name"
+                                    type="text"
+                                    placeholder="Фамилия"
+                                    className="mt-1 w-full border dark:border-gray-700 rounded-md px-3 py-2 text-gray-800 dark:text-gray-100 dark:bg-gray-800"
                                 />
                                 {errors.lastName && (
                                     <span role="alert" className="text-red-500 text-sm">
@@ -121,18 +121,19 @@ export default function Register() {
                                 )}
                             </Field>
                         </div>
-                        <div className="my-4">
+
+                        <div>
                             <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Ваша роль
                             </span>
                             <div className="flex items-center gap-6">
                                 <div className="flex items-center gap-2">
                                     <input
+                                        {...register('role')}
                                         type="radio"
                                         id="role-patient"
                                         value="patient"
                                         className="accent-blue-500 dark:accent-blue-400"
-                                        {...register('role')}
                                     />
                                     <label
                                         htmlFor="role-patient"
@@ -143,11 +144,11 @@ export default function Register() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <input
+                                        {...register('role')}
                                         type="radio"
                                         id="role-doctor"
                                         value="doctor"
                                         className="accent-blue-500 dark:accent-blue-400"
-                                        {...register('role')}
                                     />
                                     <label
                                         htmlFor="role-doctor"
@@ -163,7 +164,8 @@ export default function Register() {
                                 </p>
                             )}
                         </div>
-                        <Field className="py-2">
+
+                        <Field>
                             <label
                                 htmlFor="email"
                                 className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -184,7 +186,7 @@ export default function Register() {
                             )}
                         </Field>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Field>
                                 <label
                                     htmlFor="password"

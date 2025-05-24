@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { getNews } from '@/services';
 import { NewsItem } from '@/types';
-import { useNewsStore, useAuth } from '@/store';
+import { useNewsStore, useAuthStore } from '@/store';
 import { useSession } from 'next-auth/react';
 import clsx from 'clsx';
 

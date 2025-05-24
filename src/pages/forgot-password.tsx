@@ -57,8 +57,8 @@ const ForgotPassword: NextPage = () => {
     return (
         <div>
             <main>
-                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-                    <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-md p-8">
+                <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+                    <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-md p-8 mt-10 mb-10">
                         <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
                             Сброс пароля
                         </h2>
@@ -83,7 +83,6 @@ const ForgotPassword: NextPage = () => {
                                     </span>
                                 )}
                             </div>
-
                             {errors.root && (
                                 <span role="alert" className="text-red-500 text-sm">
                                     {errors.root.message}

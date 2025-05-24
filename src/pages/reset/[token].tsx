@@ -75,9 +75,9 @@ export default function ResetPasswordPage() {
 
     return (
         <div className="w-full">
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
-                <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
-                    <h1 className="mb-6 text-center text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+            <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-green-100 via-white to-yellow-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
+                <div className="w-full max-w-2xl bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 mt-10 mb-10">
+                    <h1 className="mb-6 text-center text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                         Изменение пароля
                     </h1>
                     <form onSubmit={handleSubmit(onSubmit)}>

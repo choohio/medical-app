@@ -1,4 +1,4 @@
-export interface Profile {
+export interface PatientProfile {
     first_name: string;
     last_name: string;
     gender: string;
@@ -6,4 +6,8 @@ export interface Profile {
     phone: string;
     address: string;
     snils: string;
+}
+
+export interface DoctorProfile {
+    
 }

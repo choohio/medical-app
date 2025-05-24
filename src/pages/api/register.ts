@@ -51,6 +51,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return userId;
         });
 
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/send-verification`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+
         return res.status(201).json({ message: 'Пользователь зарегистрирован!', userId: result });
     } catch (error: unknown) {
         if (error instanceof Error && error.message.includes('UNIQUE constraint failed')) {

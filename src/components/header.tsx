@@ -20,6 +20,7 @@ import {
   MoonIcon,
 } from '@heroicons/react/24/outline';
 import { useSession, signOut } from "next-auth/react";
+import { useAuthStore } from '@/store';
 
 const navItems = [
   { id: 1, label: 'Главная', href: '/' },
@@ -48,6 +49,8 @@ export function Header() {
 
   const { data: session } = useSession();
     const userId = session?.user?.id;
+    const { user, isAuthenticated, userIsLoading } = useAuthStore();
+
 
     const { data: profile, isLoading } = useProfile(String(userId));
 
@@ -62,6 +65,8 @@ export function Header() {
 
   const handleLogout = async () => {
     signOut({ callbackUrl: '/' });
+    useAuthStore.getState().setUser(null);
+    useAuthStore.getState().setIsAuthenticated(false);
   };
 
   return (
