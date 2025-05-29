@@ -6,18 +6,13 @@ import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
 import { DoctorSelector, DateSelector, TimeSelector } from '@/components';
-import { useAppointmentStore, useAuth } from '@/store';
-import {
-    useAvailableTimes,
-    useAvailableDates,
-    useDoctors,
-    createAppointment,
-    AppointmentData,
-} from '@/services';
+import { useAppointmentStore } from '@/store';
+import { useDoctors, createAppointment, AppointmentData } from '@/services';
 import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { DefaultError } from '@tanstack/query-core';
 import { isErrorWithMessage } from '@/utils/isErrorWithMessage';
+import { useSession } from 'next-auth/react';
 
 const appointmentSchema = z.object({
     doctorId: z.string().min(1, 'Выберите врача'),
@@ -32,18 +27,10 @@ const AppointmentPage: FC = () => {
     const { selectedDoctor, selectedDate, selectedTime, setTime, setDate, setDoctor, setError } =
         useAppointmentStore();
 
-    const { data: doctors, isLoading: isLoadingDoctors } = useDoctors();
+    const { data: doctors, isLoading } = useDoctors();
 
-    const { data: availableTimes, isLoading: isLoadingTimes } = useAvailableTimes(
-        selectedDoctor?.id || null,
-        selectedDate
-    );
-
-    const { data: availableDates, isLoading: isLoadingDates } = useAvailableDates(
-        selectedDoctor?.id || null
-    );
-
-    const user = useAuth((s) => s.user);
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
 
     const createAppointmentMutation = useMutation<Appointment, DefaultError, AppointmentData>({
         mutationFn: createAppointment,
@@ -60,13 +47,13 @@ const AppointmentPage: FC = () => {
     });
 
     const onSubmit = async (data: AppointmentFormValues) => {
-        if (!data?.doctorId || !data.date || !data.time || !user?.userId) return;
+        if (!data?.doctorId || !data.date || !data.time || !userId) return;
 
         await createAppointmentMutation.mutateAsync({
             doctor_id: data.doctorId,
             appointment_date: data.date,
             appointment_time: data.time,
-            patient_id: user.userId,
+            patient_id: userId,
             appointment_type: 'online',
         });
     };
@@ -95,7 +82,7 @@ const AppointmentPage: FC = () => {
             </button>
 
             <h1 className="text-2xl font-semibold mb-6">Запись на приём</h1>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 flex flex-col">
                 <Controller
                     name="doctorId"
                     control={control}
@@ -105,10 +92,10 @@ const AppointmentPage: FC = () => {
                             value={field.value}
                             onChange={(value) => {
                                 field.onChange(value);
-                                setDoctor(doctors.find((doc: Doctor) => doc.id === value));
+                                setDoctor(doctors.find((doc: Doctor) => String(doc.id) === value));
                             }}
                             error={errors.doctorId?.message}
-                            isLoading={isLoadingDoctors}
+                            isLoading={isLoading}
                         />
                     )}
                 />
@@ -118,8 +105,10 @@ const AppointmentPage: FC = () => {
                     control={control}
                     render={({ field }) => (
                         <DateSelector
-                            isLoading={isLoadingDates}
-                            availableDates={availableDates?.dates}
+                            isLoading={isLoading}
+                            availableDates={selectedDoctor?.timegiqslots.map(
+                                (timeslot) => timeslot.date
+                            )}
                             value={field.value}
                             onChange={(value) => {
                                 field.onChange(value);
@@ -130,22 +119,26 @@ const AppointmentPage: FC = () => {
                     )}
                 />
 
-                <Controller
-                    name="time"
-                    control={control}
-                    render={({ field }) => (
-                        <TimeSelector
-                            availableTimes={availableTimes?.times}
-                            isLoading={isLoadingTimes}
-                            value={field.value}
-                            onChange={(value) => {
-                                field.onChange(value);
-                                setTime(value);
-                            }}
-                            error={errors.time?.message}
-                        />
-                    )}
-                />
+                {selectedDate && (
+                    <Controller
+                        name="time"
+                        control={control}
+                        render={({ field }) => (
+                            <TimeSelector
+                                availableTimes={selectedDoctor?.timeslots.map(
+                                    (timeslot) => timeslot.time
+                                )}
+                                isLoading={isLoading}
+                                value={field.value}
+                                onChange={(value) => {
+                                    field.onChange(value);
+                                    setTime(value);
+                                }}
+                                error={errors.time?.message}
+                            />
+                        )}
+                    />
+                )}
 
                 <button
                     type="submit"

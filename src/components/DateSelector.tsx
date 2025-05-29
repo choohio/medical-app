@@ -4,7 +4,7 @@ interface DateSelectorProps {
     value: string;
     onChange: (value: string) => void;
     error?: string;
-    availableDates: string[];
+    availableDates?: Date[];
     isLoading?: boolean;
 }
 
@@ -23,9 +23,13 @@ export const DateSelector = ({
         return null;
     }
 
+    if (!availableDates.length) {
+        return 'У врача нет доступных дат';
+    }
+
     return (
         <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Выберите дату</label>
+            <label className="block text-sm font-medium text-gray-700">Выберите дату</label>
 
             <div className="grid grid-cols-3 gap-2">
                 {availableDates.map((date) => (

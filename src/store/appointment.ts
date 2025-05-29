@@ -1,12 +1,14 @@
 import { create } from 'zustand';
-import { Doctor } from '@/types';
+import { Doctor, TimeSlot } from '@/types';
+
+type DoctorWithTimeslots = Doctor & { timeslots: TimeSlot[] };
 
 interface Store {
-    selectedDoctor: Doctor | null;
+    selectedDoctor: DoctorWithTimeslots | null;
     selectedDate: string | null;
     selectedTime: string | null;
     error: string | null;
-    setDoctor: (doctor: Doctor) => void;
+    setDoctor: (doctor: DoctorWithTimeslots) => void;
     setDate: (date: string) => void;
     setTime: (time: string) => void;
     setError: (error: string) => void;

@@ -7,7 +7,3 @@ export interface PatientProfile {
     address: string;
     snils: string;
 }
-
-export interface DoctorProfile {
-    
-}

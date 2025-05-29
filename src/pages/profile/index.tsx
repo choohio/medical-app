@@ -9,9 +9,8 @@ import { useSession } from 'next-auth/react';
 
 export default function ProfilePage() {
     const { data: session } = useSession();
-    console.log(session);
     const userId = session?.user?.id;
-    console.log(userId);
+
     const { data: profile, isLoading } = useProfile(String(userId));
     const { data: appointments, isLoading: isLoadingAppointments } = useGetAppointmentsByUserId(userId);
 

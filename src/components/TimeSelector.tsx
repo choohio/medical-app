@@ -2,7 +2,7 @@ interface TimeSelectorProps {
     value: string;
     onChange: (value: string) => void;
     error?: string;
-    availableTimes: string[]; // "HH:mm" строки,
+    availableTimes?: Date[];
     isLoading?: boolean;
 }
 
