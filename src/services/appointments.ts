@@ -42,7 +42,7 @@ export const useGetAppointment = (appointmentId: string) =>
         },
     });
 
-export const useGetAppointmentsByUserId = (userId: string) =>
+export const useGetAppointmentsByUserId = (userId?: string) =>
     useQuery<GetAppointmentsResult[]>({
         queryKey: ['useGetAppointmentsByUser', userId],
         enabled: !!userId,

@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { user, patientProfile, doctorProfile } from '../../../../db/schema';
+import { patientProfile } from '../../../../db/schema';
 import { db } from '../../../../db/db';
 import { eq } from 'drizzle-orm';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-
+    console.log(req.query, id);
     if (typeof id !== 'string') {
         return res.status(400).json({ error: 'Некорректный ID' });
     }
@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'PUT') {
-        const { first_name, gender, birth_date, phone, address, snils } = req.body;
+        const { first_name, gender, birth_date, snils } = req.body;
 
         try {
             const existing = await db

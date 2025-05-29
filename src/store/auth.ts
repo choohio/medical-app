@@ -23,29 +23,29 @@ export const useAuthStore = create<AuthState>((set) => ({
     checkAuth: async () => {
         set({ userIsLoading: true });
         try {
-          // 1. Проверяем сессию через NextAuth
-          const sessionRes = await fetch('/api/auth/session');
-          const session = await sessionRes.json();
-    
-          if (session?.user) {
-            set({ user: session.user, isAuthenticated: true });
-            
-            // 2. Загружаем профиль из таблицы `profile`
-            const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
-            const profile = await profileRes.json();
-    
-            if (profile) {
-              set({ profile });
+            // 1. Проверяем сессию через NextAuth
+            const sessionRes = await fetch('/api/auth/session');
+            const session = await sessionRes.json();
+
+            if (session?.user) {
+                set({ user: session.user, isAuthenticated: true });
+
+                // 2. Загружаем профиль из таблицы `profile`
+                const profileRes = await fetch(`/api/profile/${session.user.id}`);
+                const profile = await profileRes.json();
+
+                if (profile) {
+                    set({ profile });
+                } else {
+                    set({ profile: null }); // Профиль не найден
+                }
             } else {
-              set({ profile: null }); // Профиль не найден
+                set({ user: null, profile: null, isAuthenticated: false });
             }
-          } else {
-            set({ user: null, profile: null, isAuthenticated: false });
-          }
         } catch (error) {
-          set({ user: null, profile: null, isAuthenticated: false });
+            set({ user: null, profile: null, isAuthenticated: false });
         } finally {
-          set({ userIsLoading: false });
+            set({ userIsLoading: false });
         }
-      },
+    },
 }));

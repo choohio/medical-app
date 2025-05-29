@@ -1,35 +1,45 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { db } from '../../../../db/db';
+import { appointments } from '../../../../db/schema';
+import type { InferModel } from 'drizzle-orm';
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { patient_id, doctor_id, appointment_time, appointment_date, appointment_type } =
-            req.body;
+// Тип для вставки новой записи
+type NewAppointment = InferModel<typeof appointments, 'insert'>;
 
-        if (!patient_id || !doctor_id) {
-            return res.status(400).json({ error: 'Ошибка при создании записи' });
-        }
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<{ message: string; id: number } | { error: string }>
+) {
+    if (req.method !== 'POST') {
+        res.setHeader('Allow', ['POST']);
+        return res.status(405).json({ error: `Метод ${req.method} не поддерживается` });
+    }
 
-        try {
-            await db.execute(
-                `INSERT INTO appointments (patient_id, doctor_id, appointment_time, appointment_date, appointment_type, status) VALUES ('${patient_id}', '${doctor_id}', '${appointment_time}', '${appointment_date}', '${appointment_type}', 'scheduled')`
-            );
+    const { patient_id, doctor_id, appointment_date, appointment_time, appointment_type } =
+        req.body;
 
-            const result = await db.execute('SELECT last_insert_rowid() as id');
-            const newId = result.rows[0].id;
+    if (!patient_id || !doctor_id || !appointment_date || !appointment_time || !appointment_type) {
+        return res.status(400).json({ error: 'Не переданы все обязательные параметры' });
+    }
 
-            return res.status(201).json({ message: 'Запись создана', id: newId });
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.error(error.message);
-            } else {
-                console.error(error);
-            }
-            return res.status(500).json({ error: 'Ошибка создании записи' });
-        }
-    } else {
-        res.status(405).json({ error: 'Метод не поддерживается' });
+    try {
+        const newAppointment: NewAppointment = {
+            patient_id,
+            doctor_id,
+            appointment_date: new Date(appointment_date),
+            appointment_time: new Date(appointment_time),
+            appointment_type,
+            status: 'scheduled',
+        };
+
+        const [inserted] = await db
+            .insert(appointments)
+            .values(newAppointment)
+            .returning({ id: appointments.id });
+
+        return res.status(201).json({ message: 'Запись создана', id: inserted.id });
+    } catch (error: unknown) {
+        console.error('Drizzle insert error:', error);
+        return res.status(500).json({ error: 'Ошибка при создании записи' });
     }
 }
-
-export default handler;
