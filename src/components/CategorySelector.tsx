@@ -1,35 +1,33 @@
-// Не забудьте установить:
-//   npm install @headlessui/react @heroicons/react
-
 import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { Skeleton } from './Skeleton';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
-import { Doctor } from '@/types';
 
-interface DoctorSelectorProps {
-    doctors: Doctor[];
+interface CategorySelectorProps {
+    categories: string[];
     value: string;
     onChange: (value: string) => void;
     error?: string;
     isLoading?: boolean;
 }
 
-export function DoctorSelector({
-    doctors,
+export function CategorySelector({
+    categories,
     isLoading,
     value,
     onChange,
     error,
-}: DoctorSelectorProps) {
+}: CategorySelectorProps) {
     if (isLoading) {
         return <Skeleton height={42} />;
     }
 
-    const selectedDoctor = doctors.find((d) => d.id === value);
-    const displayValue = selectedDoctor
-        ? `${selectedDoctor.first_name} ${selectedDoctor.last_name}`
-        : 'Выберите врача';
+    if (categories.length === 0) {
+        return <p className="text-sm text-gray-500">Врачи не найдены</p>;
+    }
+
+    const selectedCategory = categories.find((c) => c === value);
+    const displayValue = selectedCategory ? selectedCategory : 'Выберите специализацию';
 
     return (
         <div className="w-full">
@@ -63,14 +61,9 @@ export function DoctorSelector({
                                 'ring-1 ring-black ring-opacity-5 focus:outline-none',
                             ].join(' ')}
                         >
-                            {!doctors.length && (
-                                <div className="relative cursor-default select-none py-2 px-4 text-gray-900">
-                                    Нет врачей
-                                </div>
-                            )}
-                            {doctors.map((doctor) => (
+                            {categories.map((category) => (
                                 <Listbox.Option
-                                    key={doctor.id}
+                                    key={category}
                                     className={({ active }) =>
                                         [
                                             active ? 'bg-gray-100' : '',
@@ -79,7 +72,7 @@ export function DoctorSelector({
                                             .filter(Boolean)
                                             .join(' ')
                                     }
-                                    value={doctor.id}
+                                    value={category}
                                 >
                                     {({ selected }) => (
                                         <>
@@ -89,7 +82,7 @@ export function DoctorSelector({
                                                     'block truncate',
                                                 ].join(' ')}
                                             >
-                                                {`${doctor.first_name} ${doctor.last_name}`}
+                                                {category}
                                             </span>
 
                                             {selected && (

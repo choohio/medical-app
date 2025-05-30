@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 type Appointment = Omit<
     InferModel<typeof appointments, 'select'>,
-    'created_at' | 'updated_at' | 'doctor_id' | 'patient_id'
+    'created_at' | 'updated_at' | 'doctor_id'
 >;
 type Doctor = Omit<InferModel<typeof doctorProfile, 'select'>, 'user_id'>;
 
@@ -59,8 +59,14 @@ export default async function handler(
 
         const result: AppointmentWithDoctor = {
             id: row.id,
-            appointment_date: row.appointment_date,
-            appointment_time: row.appointment_time,
+            appointment_date:
+                row.appointment_date instanceof Date
+                    ? row.appointment_date.toISOString().slice(0, 10) // YYYY-MM-DD
+                    : row.appointment_date,
+            appointment_time:
+                row.appointment_time instanceof Date
+                    ? row.appointment_time.toISOString().slice(11, 16) // HH:MM
+                    : row.appointment_time,
             appointment_type: row.appointment_type,
             status: row.status,
             comment: row.comment,

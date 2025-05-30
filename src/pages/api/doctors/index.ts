@@ -4,9 +4,18 @@ import { doctorProfile, doctorTimeSlots } from '../../../../db/schema';
 import type { InferModel } from 'drizzle-orm';
 
 type Doctor = InferModel<typeof doctorProfile, 'select'>;
-type TimeSlot = InferModel<typeof doctorTimeSlots, 'select'>;
 
-type DoctorWithSlots = Omit<Doctor & { timeslots: TimeSlot[] }, 'user_id'>;
+type Timeslot = { time: string; duration: number; is_booked: boolean };
+
+type DoctorWithSlots = Omit<
+    Doctor & {
+        timeslots: {
+            date: string;
+            timeslots: Timeslot[];
+        }[];
+    },
+    'user_id'
+>;
 
 export default async function handler(
     req: NextApiRequest,
@@ -38,10 +47,39 @@ export default async function handler(
             })
             .from(doctorTimeSlots);
 
-        const result = doctors.map((doc) => ({
-            ...doc,
-            timeslots: slots.filter((s) => s.doctor_profile_id === doc.id),
-        }));
+        const result = doctors.map((doc) => {
+            const docSlots = slots.filter((s) => s.doctor_profile_id === doc.id);
+
+            const grouped: Record<string, { date: string; timeslots: Timeslot[] }> = {};
+            for (const slot of docSlots) {
+                const dateKey =
+                    slot.date instanceof Date
+                        ? slot.date.toISOString().slice(0, 10) // YYYY-MM-DD
+                        : slot.date; // если уже строка
+                if (!grouped[dateKey]) {
+                    grouped[dateKey] = {
+                        date: dateKey,
+                        timeslots: [],
+                    };
+                }
+                const timeStr =
+                    slot.time instanceof Date
+                        ? slot.time.toISOString().slice(11, 16) // HH:MM
+                        : slot.time;
+                if (!grouped[dateKey].timeslots.find((timeslot) => timeslot.time === timeStr)) {
+                    grouped[dateKey].timeslots.push({
+                        time: timeStr,
+                        duration: slot.duration,
+                        is_booked: slot.is_booked,
+                    });
+                }
+            }
+
+            return {
+                ...doc,
+                timeslots: Object.values(grouped),
+            };
+        });
 
         return res.status(200).json(result);
     } catch (error) {

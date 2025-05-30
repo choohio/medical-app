@@ -22,12 +22,20 @@ export default async function handler(
         return res.status(400).json({ error: 'Не переданы все обязательные параметры' });
     }
 
+    // распарсим части
+    const [year, month, day] = appointment_date.split('-').map(Number);
+    const [hours, minutes] = appointment_time.split(':').map(Number);
+
+    // создаём полные объекты Date
+    const dateObj = new Date(year, month - 1, day); // 1970-01-21T00:00:00
+    const timeObj = new Date(year, month - 1, day, hours, minutes); // 1970-01-21T06:28:00
+
     try {
         const newAppointment: NewAppointment = {
             patient_id,
             doctor_id,
-            appointment_date: new Date(appointment_date),
-            appointment_time: new Date(appointment_time),
+            appointment_date: dateObj,
+            appointment_time: timeObj,
             appointment_type,
             status: 'scheduled',
         };

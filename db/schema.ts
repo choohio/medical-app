@@ -44,7 +44,7 @@ export const doctorTimeSlots = sqliteTable('doctor_time_slots', {
     date: integer({ mode: 'timestamp' }).notNull(),
     time: integer({ mode: 'timestamp' }).notNull(),
     duration: integer('duration').notNull().default(1800000),
-    is_booked: integer({ mode: 'boolean' }).default(false),
+    is_booked: integer({ mode: 'boolean' }).notNull().default(false),
 });
 
 export const news = sqliteTable('news', {

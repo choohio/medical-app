@@ -1,27 +1,33 @@
 'use client';
 
 import Link from 'next/link';
-import { DateTime } from 'luxon';
 import { useGetAppointment } from '@/services';
 import { useRouter } from 'next/router';
-import { useAuth } from '@/store';
+import { useSession } from 'next-auth/react';
+import { Skeleton } from '@/components';
+
+const ruDateFormatter = new Intl.DateTimeFormat('ru', {
+    day: 'numeric',
+    month: 'long',
+});
 
 export default function SuccessPage() {
     const router = useRouter();
     const { id } = router.query;
     const { data, isLoading } = useGetAppointment(id as string);
-    const user = useAuth((state) => state.user);
+    const { data: session } = useSession();
 
     if (isLoading || !data) {
-        return <p>загрузка</p>;
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-tr from-yellow-100 via-blue-100 to-green-100">
+                <div className="bg-white rounded-xl shadow-md max-w-md text-center space-y-4">
+                    <Skeleton width={448} height={300} />
+                </div>
+            </div>
+        );
     }
 
-    const formattedDate = DateTime.fromISO(`${data.appointment_date}T${data.appointment_time}`)
-        .setLocale('ru')
-        .toFormat('d MMMM yyyy г.');
-    const formattedTime = DateTime.fromISO(
-        `${data.appointment_date}T${data.appointment_time}`
-    ).toFormat('HH:mm');
+    const formattedDate = ruDateFormatter.format(new Date(data.appointment_date));
 
     const addressUrl = `https://maps.google.com/?q=${data.doctor.address}`;
 
@@ -34,10 +40,10 @@ export default function SuccessPage() {
 
                 <p className="text-gray-700">Вы записаны на приём к:</p>
 
-                <p className="font-medium">{`${data.doctor.specialty} ${data.doctor.first_name} ${data.doctor.last_name}`}</p>
+                <p className="font-medium">{`${data.doctor.category} ${data.doctor.first_name} ${data.doctor.last_name}`}</p>
 
                 <p>
-                    Будем вас ждать <b>{formattedDate}</b> в <b>{formattedTime}</b>
+                    Будем вас ждать <b>{formattedDate}</b> в <b>{data.appointment_time}</b>
                 </p>
 
                 <p className="text-sm text-gray-600">
@@ -55,14 +61,10 @@ export default function SuccessPage() {
                             </a>
                         </>
                     )}
-                    По адресу:
-                    <a href={addressUrl} className="text-blue-600 hover:underline" target="_blank">
-                        {data.doctor.address}
-                    </a>
                 </p>
 
                 <Link
-                    href={`/history/${user?.userId}`}
+                    href={`/history/${session?.user.id}`}
                     className="text-blue-600 hover:underline text-sm block pt-2"
                 >
                     Посмотреть историю приёмов
