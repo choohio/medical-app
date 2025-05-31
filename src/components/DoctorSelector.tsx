@@ -42,7 +42,7 @@ export function DoctorSelector({
                             error ? 'border-red-500' : 'border border-gray-300',
                         ].join(' ')}
                     >
-                        <span className="block truncate">{displayValue}</span>
+                        <span className="block truncate dark:text-gray-900">{displayValue}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                             <ChevronUpDownIcon
                                 className="h-5 w-5 text-gray-400"
@@ -64,7 +64,7 @@ export function DoctorSelector({
                             ].join(' ')}
                         >
                             {!doctors.length && (
-                                <div className="relative cursor-default select-none py-2 px-4 text-gray-900">
+                                <div className="relative cursor-default select-none py-2 px-4 text-gray-900 dark:text-gray-900">
                                     Нет врачей
                                 </div>
                             )}
@@ -74,7 +74,7 @@ export function DoctorSelector({
                                     className={({ active }) =>
                                         [
                                             active ? 'bg-gray-100' : '',
-                                            'relative cursor-pointer select-none py-2 pl-3 pr-9',
+                                            'relative cursor-pointer select-none py-2 pl-3 pr-9 dark:text-gray-900',
                                         ]
                                             .filter(Boolean)
                                             .join(' ')

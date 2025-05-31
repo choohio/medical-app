@@ -18,7 +18,7 @@ export function TimeSelector({ times, value, onSelect }: TimeSelectorProps) {
 
     return (
         <>
-            <h1 className="text-base mb-2 text-gray-600">Выберите время</h1>
+            <h1 className="text-base mb-2 text-gray-600 dark:text-white">Выберите время</h1>
             <div className="flex flex-wrap gap-3">
                 {times.map(({ time, is_booked }) => {
                     const isSelected = time === value;

@@ -100,15 +100,17 @@ const AppointmentPage: FC = () => {
         <div className="max-w-xl mx-auto py-8">
             <button
                 onClick={() => router.push('/profile')}
-                className="flex items-center text-sm text-black hover:text-gray-500 mb-4 cursor-pointer"
+                className="flex items-center text-sm text-black dark:text-white hover:text-gray-500  dark:hover:text-gray-300 mb-4 cursor-pointer"
             >
                 <ArrowLeftIcon className="w-6 h-6 mr-2" />
                 <h1 className="text-2xl font-semibold ">Запись на приём</h1>
             </button>
 
-            <div className="bg-white p-8 rounded-xl shadow">
+            <div className=" p-8 rounded-xl shadow bg-white/80 dark:bg-gray-900/80">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 flex flex-col">
-                    <h1 className="text-base mb-2 text-gray-600">Выберите специальность и врача</h1>
+                    <h1 className="text-base mb-2 text-gray-600 dark:text-white">
+                        Выберите специальность и врача
+                    </h1>
                     <div className="flex gap-4">
                         <Controller
                             name="category"
@@ -160,6 +162,8 @@ const AppointmentPage: FC = () => {
                                     onSelect={(value) => {
                                         field.onChange(value);
                                         setDate(value);
+                                        setValue('time', '');
+                                        setTime(null);
                                     }}
                                 />
                             )}

@@ -24,6 +24,8 @@ export const patientProfile = sqliteTable('patient_profile', {
     snils: text('snils'),
     gender: text('gender'),
     birthDate: text('birthday'),
+    phone: text('phone'),
+    avatar_url: text('avatar_url'),
 });
 
 export const doctorProfile = sqliteTable('doctor_profile', {
@@ -34,6 +36,8 @@ export const doctorProfile = sqliteTable('doctor_profile', {
     first_name: text('first_name'),
     last_name: text('last_name'),
     category: text('category'),
+    phone: text('phone'),
+    avatar_url: text('avatar_url'),
 });
 
 export const doctorTimeSlots = sqliteTable('doctor_time_slots', {

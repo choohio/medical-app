@@ -27,7 +27,7 @@ export async function createAppointment(data: AppointmentData): Promise<Appointm
     return response.data;
 }
 
-interface GetAppointmentsResult extends Appointment {
+export interface GetAppointmentsResult extends Appointment {
     doctor: Doctor;
 }
 

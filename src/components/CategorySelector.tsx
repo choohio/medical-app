@@ -23,7 +23,7 @@ export function CategorySelector({
     }
 
     if (categories.length === 0) {
-        return <p className="text-sm text-gray-500">Врачи не найдены</p>;
+        return <p className="text-sm text-gray-500 dark:text-gray-900">Врачи не найдены</p>;
     }
 
     const selectedCategory = categories.find((c) => c === value);
@@ -40,7 +40,7 @@ export function CategorySelector({
                             error ? 'border-red-500' : 'border border-gray-300',
                         ].join(' ')}
                     >
-                        <span className="block truncate">{displayValue}</span>
+                        <span className="block truncate dark:text-gray-900">{displayValue}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                             <ChevronUpDownIcon
                                 className="h-5 w-5 text-gray-400"
@@ -80,6 +80,7 @@ export function CategorySelector({
                                                 className={[
                                                     selected ? 'font-semibold' : 'font-normal',
                                                     'block truncate',
+                                                    'dark:text-gray-900',
                                                 ].join(' ')}
                                             >
                                                 {category}

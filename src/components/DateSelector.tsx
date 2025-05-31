@@ -25,7 +25,7 @@ export function DateSelector({ dates, value, onSelect }: DateSelectorProps) {
 
     return (
         <>
-            <h1 className="text-base mb-2 text-gray-600">Выберите дату</h1>
+            <h1 className="text-base mb-2 text-gray-600 dark:text-white">Выберите дату</h1>
             <div className="flex flex-wrap gap-3">
                 {dates.map((ts) => {
                     const isSelected = ts === value;

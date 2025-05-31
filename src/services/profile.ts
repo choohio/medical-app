@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Profile } from '@/types';
+import { PatientProfile } from '@/types';
 
 export const useProfile = (userId: string) => {
-    return useQuery<Profile>({
+    return useQuery<PatientProfile>({
         queryKey: ['profile', userId],
         enabled: !!userId,
         queryFn: async () => {
@@ -13,10 +13,11 @@ export const useProfile = (userId: string) => {
     });
 };
 
-export const useUpdateProfile = (userId: string) => {
+export const useUpdateProfile = (userId?: string) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (updated: Partial<Profile>) => axios.put(`/api/profile/${userId}`, updated),
+        mutationFn: (updated: Partial<PatientProfile>) =>
+            axios.put(`/api/profile/${userId}`, updated),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile', userId] }),
     });
 };
