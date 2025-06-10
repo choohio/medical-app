@@ -45,7 +45,7 @@ const Home: NextPage = () => {
                     ) : (
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
-                                href="/register"
+                                href="/signup"
                                 className="px-8 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
                             >
                                 Зарегистрироваться

@@ -7,11 +7,15 @@ type LoginResponse = {
 };
 
 export async function registerUser(data: RegisterData) {
-    const response = await axios.post('/api/register', data).catch((err) => {
+    try {
+        const response = await axios.post('/api/signup', data);
+        return response.data;
+    } catch (err: any) {
+        if (axios.isAxiosError(err) && err.response?.data?.error) {
+            throw new Error(err.response.data.error);
+        }
         throw new Error(err.message || 'Ошибка при регистрации');
-    });
-
-    return response.data;
+    }
 }
 
 export async function loginUser(data: LoginData): Promise<LoginResponse> {

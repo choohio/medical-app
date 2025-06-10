@@ -11,21 +11,21 @@ import { db } from '../../../../db/db';
 declare module "next-auth" {
   interface Session {
     user: {
-      id: string; // Add id to session user
-      name?: string | null; // Ensure name is included and nullable
-      email?: string | null; // Ensure email is included and nullable
-      image?: string | null; // Ensure image is included and nullable
+      id: string; 
+      name?: string | null; 
+      email?: string | null; 
+      image?: string | null; 
     } & DefaultSession['user'];
   }
 
   interface User extends DefaultUser {
-    id: string; // Ensure id is string in User type
+    id: string; 
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    id: string; // Add id to JWT token
+    id: string; 
   }
 }
 

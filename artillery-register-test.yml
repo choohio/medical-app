@@ -1,0 +1,22 @@
+config:
+  target: "http://localhost:3000"  
+  phases:
+    - duration: 30
+      arrivalRate: 1  # 1 регистраций в секунду
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Регистрация новых пользователей"
+    flow:
+      - post:
+          url: "/api/register"
+          json:
+            email: "user_{{ $uuid }}@example.com"
+            password: "Password123!"
+            firstName: "Patient"
+            lastName: "Patient"
+            role: "patient"
+          expect:
+            - statusCode: 201
